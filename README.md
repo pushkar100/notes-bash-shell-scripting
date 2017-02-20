@@ -9,452 +9,459 @@ BASH script = **B**ourne **A**gain **SH**ell script
 
 ### Executing a Shell Script:
 
-Give execute permission to your script:
-Ex: `chmod +x /path/to/yourscript.sh`
+Give execute permission to your script. Ex: `chmod +x /path/to/yourscript.sh`
 
-And to run your script:
-Ex: `/path/to/yourscript.sh`
+And to run your script. Ex: `/path/to/yourscript.sh`
 
-(We can also use the relative path if it is known: Ex: `./yourscript.sh`) ['./' is necessary!]
+We can also use the relative path if it is known: Ex: `./yourscript.sh` (`./` is necessary if directory is not in $PATH!)
 
-----------------------------------------------------------------------------------------------------------------
-
-Introduction (First Line of a shell script):
---------------------------------------------
+### First Line of a shell script:
 
 When we create a shell script and wish to run it, we need to make sure it has the execute permission.
+
 Use `chmod` command to add it, if execute permission does not exist.
 
 Every script STARTS with a line like this:
+
 `#!/path/to/interpreter`
-[The #(sharp) and !(bang/exclamation) are collectively known as the 'SHEBANG'.]
+
+The #(sharp) and !(bang/exclamation) are collectively known as the 'SHEBANG'.
 
 The first line tells us which interpreter(Shell) is supposed to execute this script!.
-(Ex: 
-	`#!/bin/csh` -> c shell, 
-	`#!/bin/ksh` -> k shell, 
-	`#!/bin/zsh` -> z shell, 
-	`#!/bin/bash` -> bash shell, 
-)
+Examples:
+- `#!/bin/csh` = c shell, 
+- `#!/bin/ksh` = k shell, 
+- `#!/bin/zsh` = z shell, 
+- `#!/bin/bash` = bash shell
 
-Basically, when the script runs:
-It is the specified shell that is running as a process and the file that it executes is the script's path.
+Basically, when the script runs: It is the specified shell that is running as a process and the file that it executes is the script's path.
 
-You don't have to use a shell as an interpreter:
-Ex: `#!/usr/bin/python` => Uses the python interpreter (Hence, a python script)
+You don't have to use a shell as an interpreter: Ex: `#!/usr/bin/python` => Uses the python interpreter (Hence, a python script)
 
 Note: If we don't specify the interpreter, the current shell executes the script but this is tricky.
 If the script contains commands not understood by the current shell, it could cause errors (Don't do this!)
 
-----------------------------------------------------------------------------------------------------------------
+### Printing/Displaying:
 
-Printing/Displaying:
---------------------
-`echo` command => It prints the supplied argument/string.
-Every echo statement prints on a NEW LINE.
+`echo` command = It prints the supplied argument/string. Every echo statement prints on a NEW LINE.
 
-Ex: `echo "Hello World!"` => Hello World!
+Ex: `echo "Hello World!"` => Output: `Hello World!`
 
-----------------------------------------------------------------------------------------------------------------
+### Comments:
 
-Comments:
----------
-Every line other than the first line (#! /bin/..) that STARTS with a '#'(pound/sharp/hash) marks a comment:
-Ex:
-`
+Every line other than the first line (#! /bin/..) that STARTS with a '#'(pound/sharp/hash) marks a comment, example:
+
+```
  #!/bin/bash
 
  # Let's print something	=> A comment
 
  echo "Hello There"
 
- # End of printing			=> A comment
-`
+ # End of printing		=> A comment
+```
 
-If '#' STARTS on the line, the WHOLE LINE is IGNORED.
-If '#' appears in the MIDDLE of a line, Anything to the RIGHT of a '#' is IGNORED.
+- If '#' STARTS on the line, the WHOLE LINE is IGNORED.
+- If '#' appears in the MIDDLE of a line, Anything to the RIGHT of a '#' is IGNORED.
 
-----------------------------------------------------------------------------------------------------------------
+### Variables:
 
-Variables:
-----------
-Storage locations that have a name.
-They are name-value pairs.
+Storage locations that have a name. They are 'name-value' pairs.
 
-Syntax:
-`VARIABLE_NAME="Value"`
+Syntax: `VARIABLE_NAME="Value"`
 
-** (NOTE:) NO SPACES before or after the '=' **
+**NOTE: NO SPACES before or after the '='**
 
-The variable names are CASE-SENSITIVE!.
-And, by "convention", they are usually in UPPERCASE.
+- The variable names are CASE-SENSITIVE!.
+- And, by "convention", they are usually in UPPERCASE.
 
-Variable Names:
----------------
+### Variable Names:
+
 Variable names can contain: 
-LETTERS (a-z, A-Z), 
-DIGITS (0-9), & 
-UNDERSCORES (_) [ONLY!]
+- LETTERS (a-z, A-Z), 
+- DIGITS (0-9), & 
+- UNDERSCORES (_) [ONLY!]
 
-[VARIABLE NAMES CANNOT START WITH A DIGIT!]
+VARIABLE NAMES **CANNOT** START WITH A DIGIT!
 
-Using Variables:
-----------------
-Precede the variable name with a '$' sign.
-Ex:
-`MY_SHELL="bash"`
-`echo "This script uses the $MY_SHELL shell". => (his script uses the bash shell)
+### Using Variables:
 
-Alternatively: [OPTIONAL]
---------------
-Enclose the variable in curly brackets '{}' and preced it with a '$':
-Ex:
-`MY_SHELL="bash"`
-`echo "I am ${MY_SHELL}ing shell"`. => (I am bashing on my keyboard)
+Precede the variable name with a '$' sign. Ex:
+```
+MY_SHELL="bash"
+echo "This script uses the $MY_SHELL shell"
+```
+Output: This script uses the bash shell.
 
-[Hint: It's a best practice to use the ${VARIABLE} syntax if there is text or characters that directly precede or follow the variable.]
+**Alternatively: (Optional)**
 
-[If variable does NOT exist, Nothing is printed in its place in the echo statement.]
+Enclose the variable in curly brackets '{}' and preced it with a '$', Ex:
+```
+MY_SHELL="bash"
+echo "I am ${MY_SHELL}ing shell"
+```
+Output: I am bashing on my keyboard
 
-Storing Commands in variables:
-------------------------------
+Hint: It's a best practice to use the ${VARIABLE} syntax if there is text or characters that directly precede or follow the variable. 
+
+If a specified variable does NOT exist, Nothing is printed in its place in the echo statement.
+
+### Storing Commands in variables:
+
 `VAR_NAME=$(command)`	
-[or]	
-`VAR_NAME=`command``  (Command enclosed with tilde sign: `) [OLDER SCRIPTS]
 
-----------------------------------------------------------------------------------------------------------------
+(or)	
 
-Tests:
-------
-Syntax:
-`[ condition-to-test-for ]`
+```
+VAR_NAME=`command`
+```
 
-Returns true if test passes, else false.
+(Command enclosed with tilde sign: Older Scripts) 
 
-Ex: `[ -e /etc/passwd]` => tests if the '/etc/passwd' file exists.
+### Tests:
 
-File Operator Tests:
---------------------
+Syntax: `[ condition-to-test-for ]`
+
+Returns true if test passes, else false. Ex: 
+
+`[ -e /etc/passwd]` = tests if the '/etc/passwd' file exists.
+
+#### File Operator Tests:
+
 General Test Syntax: `[ -flag fileOrDirPath]`
 Flags:
-`-d` = True if file is a directory
-`-e` = True if file exists
-`-f` = True if file exists and is a regular file
-`-s` = True if file exists and is NOT empty
-`-r` = True if file is readable by you
-`-w` = True if file is writable by you
-`-x` = True if file is executable by you
+- `-d` = True if file is a directory
+- `-e` = True if file exists
+- `-f` = True if file exists and is a regular file
+- `-s` = True if file exists and is NOT empty
+- `-r` = True if file is readable by you
+- `-w` = True if file is writable by you
+- `-x` = True if file is executable by you
 
-String Operator Tests:
-----------------------
-General Test Syntax: `[ -flag STRING]`
+#### String Operator Tests:
+
+##### General Test Syntax: `[ -flag STRING]`
+
 Flags:
-`-z` = True if STRING is empty
-`-n` = True if STRING is NOT empty
+- `-z` = True if STRING is empty
+- `-n` = True if STRING is NOT empty
 
 Equality Tests:
-`STRING1 = STRING2` = True if strings are equal
-`STRING1 != STRING2` = True if strings are NOT equal
+- `STRING1 = STRING2` = True if strings are equal
+- `STRING1 != STRING2` = True if strings are NOT equal
 
-[NOTE: For testing Variable string in the conditions, enclose it in quote(""):
-	Ex: `[ "$MY_SHELL" = "bash"]`
-]
+NOTE: For testing Variable string in the conditions, enclose it in quote(""). Ex: 
 
-Arithmetic Operator Tests:
---------------------------
+`"$MY_SHELL" = "bash"`
+
+#### Arithmetic Operator Tests:
+
 General Test Syntax: `[ arg1 -flag arg2]`
+
 Flags:
-`-eq` = True if arg1 equals to arg2
-`-ne` = True if arg1 is NOT equal to arg2
-`-lt` = True if arg1 is LESS THAN arg2
-`-le` = True if arg1 is LESS THAN OR EQUAL TO arg2
-`-gt` = True if arg1 is GREATER THAN arg2
-`-ge` = True if arg1 GREATER THAN OR EQUAL TO arg2
+- `-eq` = True if arg1 equals to arg2
+- `-ne` = True if arg1 is NOT equal to arg2
+- `-lt` = True if arg1 is LESS THAN arg2
+- `-le` = True if arg1 is LESS THAN OR EQUAL TO arg2
+- `-gt` = True if arg1 is GREATER THAN arg2
+- `-ge` = True if arg1 GREATER THAN OR EQUAL TO arg2
 
-------------------------------
+
 (`man test` => Help on tests.)
-------------------------------
 
-----------------------------------------------------------------------------------------------------------------
+### The `if` Condition: (Uses Tests in its conditional)
 
-The `if` Condition: (Uses Tests in its conditional)
--------------------
-`if [ condition-is-true ]
- then
- 	command 1
+```
+if [ condition-is-true ]
+then
+	command 1
  	command 2
  	...
- 	command N
- fi`
+	command N
+fi
+```
 
-The `if-else` Condition: (Uses Tests in its conditional)
-------------------------
-`if [ condition-is-true ]
- then
- 	commands 1 ... N
- else
- 	commands 1 ... N
- fi`
+### The `if-else` Condition: (Uses Tests in its conditional)
 
-The `if-elif-else` Condition: (Uses Tests in its conditional)
-------------------------
-`if [ condition-is-true ]
- then
- 	commands 1 ... N
- elif [ condition-is-true ]
- then
- 	commands 1 ... N
- else
- 	commands 1 ... N
- fi`
+```
+if [ condition-is-true ]
+then
+	commands 1 ... N
+else
+	commands 1 ... N
+fi
+```
 
-----------------------------------------------------------------------------------------------------------------
+### The `if-elif-else` Condition: (Uses Tests in its conditional)
 
-The `for` loop:
----------------
-`for VARIABLE_NAME in ITEM_1 ... ITEM_N
- do
- 	command 1
- 	command 2
- 	...
- 	command N
- done`
+```
+if [ condition-is-true ]
+then
+	commands 1 ... N
+elif [ condition-is-true ]
+then
+	commands 1 ... N
+else
+	commands 1 ... N
+fi
+```
 
- (First item in the block is assigned to variable and commands are executed, 
- next item in in the block is assigned to variable and commands are executed again, and so on ...)
+### The `for` loop:
 
- (VARIABLE_NAME need NOT be declared earlier.)
+```
+for VARIABLE_NAME in ITEM_1 ... ITEM_N
+do
+	command 1
+	command 2
+	...
+	command N
+done
+```
 
-Ex 1:
------
-`for COLOR in red green blue
+First item in the block is assigned to variable and commands are executed, next item in in the block is assigned to variable and commands are executed again, and so on ...
+
+VARIABLE_NAME need NOT be declared earlier.
+
+**Ex 1:**
+
+```
+for COLOR in red green blue
 do
     echo "COLOR: $COLOR"
-done`
+done
+```
 
 Output:
+```
 COLOR: red
 COLOR: green
 COLOR: blue
+```
 
-* (We can also store the items in a variable, separated by spaces!) *
+**We can also store the items in a variable, separated by spaces!**
 
-Ex 2:
------
-`COLORS="red green blue"
+**Ex 2:**
+
+```
+COLORS="red green blue"
 for COLOR in $COLORS
 do
     echo "COLOR: $COLOR"
-done`
+done
+```
 
 Output:
+```
 COLOR: red
 COLOR: green
 COLOR: blue
+```
 
-[Note:: Bash scripting also contains `while` loops]
+Note:: Bash scripting also contains `while` loops.
 
-----------------------------------------------------------------------------------------------------------------
+### Positional Parameters:
 
-Positional Parameters:
-----------------------
-`$ script.sh parameter1 parameter2 parameter3`
+Syntax (On the CLI): `$ script.sh parameter1 parameter2 parameter3`
 
-$0 = "script.sh" (The script itself)
-$1 = "parameter1"
-$2 = "parameter2"
-$3 = "parameter3"
+- `$0` = "script.sh" (The script itself)
+- `$1` = "parameter1"
+- `$2` = "parameter2"
+- `$3` = "parameter3"
 
-We can Assign Positional Parameters to Variables:
-Ex: `USER=$1`
+We can Assign Positional Parameters to Variables. Ex: 
 
-The `$@`:
----------
-`$@` contains all the parameters starting from Parameter 1 to the last parameter.
-It can be used to loop over parameters.
-Ex:
-`for USER in $@
- do
+`USER=$1`
+
+#### The `$@`:
+
+`$@` contains all the parameters starting from Parameter 1 to the last parameter. It can be used to loop over parameters. Ex:
+```
+for USER in $@
+do
 	echo "Archiving user : $USER"
 	...
 	...
- done`
+done
+```
 
-----------------------------------------------------------------------------------------------------------------
+### Accepting User Input (STDIN):
 
-Accepting User Input (STDIN):
------------------------------
 `read` command.
 
-Syntax:
-`read -p "PROMPT" VARIABLE`
+Syntax: `read -p "PROMPT" VARIABLE`
 
-(Note: The input could also come from pipelined(|) / redirected output/input(<, >) if STDIN is changed to those.)
+Note: The input could also come from pipelined(|) or redirected output/input(<, >) if STDIN is changed to those.
 
 Ex:
-`read -p "Enter a UserName: " USER
- echo "ARCHIVING $USER"`
+```
+read -p "Enter a UserName: " USER
+echo "ARCHIVING $USER"
+```
 
-----------------------------------------------------------------------------------------------------------------
+### Exit Status of Commands:
 
-Exit Status of Commands:
-------------------------
-Every command returns an exit status.
-Range of the status is from 0 - 255.
-It is used for Error checking. 
+Every command returns an exit status. Range of the status is from `0 - 255`. It is used for Error checking. 
 
-0 = Success
-Other than 0 = Error condition
+- `0` 			= Success
+- Other than `0` 	= Error condition
 
-** [Use `man` on the command to find out what exit status means what (for the command).] **o
+**Use `man` on the command to find out what exit status means what (for the command).**
 
-The `$?`: (return code/exit status)
----------
+#### The `$?`: (Return code/exit status)
+
 `$?` contains the return code(exit status) of the 'previously executed' command.
 
 Ex:
-`ls /not/here
- echo "$?"` => 2 (output 2 is the return command)
+```
+ls /not/here
+echo "$?"
+```
+
+Output: `2` is echoed, which is the return command.
 
 Ex:
-`HOST="google.com"
- ping -c 1 $HOST		=> -c tells command to send only 1 packet to test connection
- if [ "$?" -eq "0" ]
- then
- 	echo "$HOST reachable."
- else
- 	echo "$HOST unreachable."
- fi`
+```
+HOST="google.com"
+ping -c 1 $HOST		=> -c tells command to send only 1 packet to test connection
+if [ "$?" -eq "0" ]
+then
+	echo "$HOST reachable."
+else
+	echo "$HOST unreachable."
+fi
+```
 
-Storing return code/exit status in a variable:
-----------------------------------------------
+#### Storing return code/exit status in a variable:
+
 Ex: 
-`ping -c 1 "google.com"
- RETURN_CODE=$?`		=> Now, we can use the variable RETURN_CODE anywhere in the script.
+```
+ping -c 1 "google.com"
+RETURN_CODE=$?		=> Now, we can use the variable RETURN_CODE anywhere in the script.
+```
 
-----------------------------------------------------------------------------------------------------------------
+### Chaining Commands:
 
-Chaining Commands:
-------------------
-`&&` => AND => Executes commands one after the other UNTIL one of them FAILS. (in that case -> short-circuiting)
-[It executes commands as long as they are returning exit statuses `0`. STOPS as soons as a command does NOT return 0]
+- `&&` => AND => Executes commands one after the other UNTIL one of them FAILS. (in that case -> short-circuiting)
+
+(It executes commands as long as they are returning exit statuses `0`. STOPS as soons as a command does NOT return 0)
+
 Syntax: `cmd1 && cmd2 && ...`
 
-`||` => OR => Executes commands one after the other UNTIL one of them SUCCEEDS. (in that case -> short-circuiting)
-[It executes commands as long as they are returning exit statuses NOT `0`. STOPS as soons as a command returns 0]
+- `||` => OR => Executes commands one after the other UNTIL one of them SUCCEEDS. (in that case -> short-circuiting)
+
+(It executes commands as long as they are returning exit statuses NOT `0`. STOPS as soons as a command returns 0)
+
 Syntax: `cmd1 || cmd2 || ...`
 
-`;` => Semicolon => Executes commands ONE AFTER ANOTHER without checking the exit statuses/return codes.
-[It it same as/equivalent to executing each of the commands on a separate line]
+- `;` => Semicolon => Executes commands ONE AFTER ANOTHER without checking the exit statuses/return codes.
+
+(It it same as/equivalent to executing each of the commands on a separate line)
+
 Syntax: `cmd1 ; cmd2 ; ...`
 
-----------------------------------------------------------------------------------------------------------------
+### Exit Statuses of Shell scripts:
 
-Exit Statuses of Shell scripts:
--------------------------------
 Shell scripts too can have exit statuses.
+
 `exit` command needs to be used. 
 
-`exit` => Exits the script with exit status equal to that of the previously executed command within the script.
-`exit X` => Exits with exit status X. X is a number between 0 & 255. (0 = Success, !0 = Error)
+- `exit` => Exits the script with exit status equal to that of the previously executed command within the script.
+- `exit X` => Exits with exit status X. X is a number between 0 & 255. (0 = Success, !0 = Error)
+
 (No exit status => This also equals the exit status of the previously executed command within the script)
 
-----------------------------------------------------------------------------------------------------------------
+### Functions:
 
-Functions:
-----------
-Reduces script length, ** "DRY"(Dont Repeat Yourself) - concept of functions ** .
-Block of reusable code
-MUST BE DEFINED BEFORE USE
-HAS PARAMETER SUPPORT
-It can return an "exit status/return code".
+Reduces script length, **"DRY"(Dont Repeat Yourself) - concept of functions**.
 
-Method 1: 
----------
+A function:
+- Is a block of reusable code.
+- Must be defined before use.
+- Has parameter support.
+- It can return an "exit status/return code".
+
+**Method 1:**
+```
 function function-name() {
 	# code goes here
 }
+```
 
-Method 2:
----------
+**Method 2:**
+```
 function-name() {
 	# code goes here
 }
+```
 
-Calling a function:
--------------------
+#### Calling a function:
+
 `function-name` 
 
-We do NOT use parentheses () in the function like in other programming languages
-Functions need to be defined before they are used. (In Top Down order of parsing)
-[That is, Function Definition must have been scanned(Top->Down parsing) before the call to the function]
+We do **NOT** use parentheses () in the function like in other programming languages. Functions need to be defined before they are used. (In Top Down order of parsing) (That is, Function Definition must have been scanned(Top->Down parsing) before the call to the function)
 
-** Functions can call other functions **
+**Functions can call other functions**
 
-Parameters to functions:
-------------------------
+#### Parameters to functions:
+
 `function-name parameter1 parameter2 ...`
 
-$1, $2, ... = Parameter1, Parameter2, ...
-$@ = Array of all the parameters
+- `$1`, `$2`, ... = Parameter1, Parameter2, ...
+- `$@` = Array of all the parameters
 
 NOTE: `$0` REFERS TO THE SHELL SCRIPT ITSELF (NOT THE FUNCTION!)
 
 Ex:
-`function hello() {
- 	echo "Hello, $1"
- }
- hello Jason`
+```
+function hello() {
+	echo "Hello, $1"
+}
+hello Jason
+```
 
-(Ouput: "Hello, Jason")
+Output: `"Hello, Jason"`
 
-Variable Scope:
----------------
-ALL Variables are GLOBAL by Default!
-Variables have to be DEFINED before Use.
+#### Variable Scope:
 
-Therefore, All variables defined 'before' a 'function call' can be accessed within it. 
-Those that are defined 'after' the 'function call' **cannot** be accessed.
+- ALL Variables are GLOBAL by Default!
+- Variables have to be DEFINED before Use.
 
-Accessing a variable that has NOT been defined before the function call -> Nothing/null/No Value for Variable.
-Accessing a variable that has been defined before the function call -> Correct value.
+Therefore, All variables defined 'before' a 'function call' can be accessed within it. Those that are defined 'after' the 'function call' **cannot** be accessed.
 
-Local Variables:
-----------------
-Variables that can be accessed only within the function that it is declared.
-Use the keyword 'local'.
+- Accessing a variable that has NOT been defined before the function call : Nothing/null/No Value for Variable.
+- Accessing a variable that has been defined before the function call : Correct value.
 
-syntax:
-`local LOCAL_VAR=someValue`
+#### Local Variables:
+
+Variables that can be accessed only within the function that it is declared. Use the keyword `local`.
+
+Syntax: `local LOCAL_VAR=someValue`
 
 Only functions can have local variables! (Try to keep variables local inside a function)
 
-Exit Status/Return Code of functions:
--------------------------------------
-1. Explicity:
-`return <RETURN_CODE>`
+#### Exit Status/Return Code of functions:
 
-(For the WHOLE SCRIPT, we used the `exit <RETURN-CODE>` command.)
+- Explicity: `return <RETURN_CODE>`
 
-2. Implicitly:
-The exit status of the last command executed within the function.
+Note: For the WHOLE SCRIPT, we used the `exit <RETURN-CODE>` command. For functions it is `return` keyword.
 
-(exit status range: 0 to 255, 
-0 = Success, all other values = errors of some kind,
-$? = gets the exit status of last executed command(after execution of cmd)/function(after the call)/script(terminal))
+- Implicitly: The exit status of the last command executed within the function.
 
-(Tip: write function to backup files, returning 0 exit status if successful)
+Exit status range: `0 to 255`
 
-----------------------------------------------------------------------------------------------------------------
+- `0` = Success, 
+- All other values = errors of some kind,
+
+- `$?` = gets the exit status of last executed command(after execution of cmd)/function(after the call)/script(terminal))
+
+Tip: write function to backup files, returning 0 exit status if successful.
 
 NOTE:
-`basename fileOrDirPath` => returns just the filename/Directory name after stripping off the path to the file.
-`dirname fileOrDirPath` => Getting the directory of the file/directory.
+- `basename fileOrDirPath` => returns just the filename/Directory name after stripping off the path to the file.
+- `dirname fileOrDirPath` => Getting the directory of the file/directory.
 
-----------------------------------------------------------------------------------------------------------------
+### Shell Script CheckList: 
 
-Shell Script CheckList: 
-=======================
 HOW to write your scripts (PATTERN!)
 
 1. Does your script start with a shebang?
@@ -466,7 +473,8 @@ HOW to write your scripts (PATTERN!)
 7. Does your script exit with an explicit exit status?
 8. At the various exit points, are exit statuses explicitly used?
 
-******************************EXAMPLE********************************
+**EXAMPLE**
+```
 #!/bin/bash
 #
 # <Replace with the description and/or purpose of this shell script.>
@@ -484,115 +492,99 @@ function function_one() {
 # <Replace with the main commands of your shell script.>
 
 # Exit with an explicit exit status. Ex: exit 0
-*********************************************************************
+```
 
-----------------------------------------------------------------------------------------------------------------
+### WILDCARDS:                       
 
-WILDCARDS:                       ** (Read in detail in: 'Command Line Basics Course/pdf/cheatsheet') **
-==========
-Character or Strings used for pattern matching.
-Also referred to as 'Globbing' -> Commonly used to match file or directory paths.
-Wilcards can be used with MOST commands.
+**(Read in detail in: 'Command Line Basics Course/pdf/cheatsheet')**
 
-* - matches 0 or more characters
-(Ex: *.txt, a*, a*.txt, *a*.txt)
+Wildcards are Character or Strings used for pattern matching. Also referred to as **'Globbing'**: Commonly used to match file or directory paths. Wilcards can be used with **MOST** commands.
 
-? - matches exactly 1 character
-(Ex: ?.txt, a?, a?.txt, ?a.txt, a???.txt)
+- * - matches 0 or more characters (Ex: *.txt, a*, a*.txt, *a*.txt)
+- ? - matches exactly 1 character (Ex: ?.txt, a?, a?.txt, ?a.txt, a???.txt)
+- [] - a character class(Mathces any of the characters inside bracket, exactly one match.) (Ex: [aeiou], ca[nt]* => can cant candy ... etc)
+- [!] - matches any of the characters NOT included inside the bracket. Exactly one match. (Ex: [!aeiou]* => First character should not be a vowel)
+- [x-y] - creating a range of values to match. Exactly one match. (Ex: [a-g]* => start with any letter between a and g, [3-6]* => start with any number between 3 and 6)
 
-[] - a character class(Mathces any of the characters inside bracket, exactly one match.)
-(Ex: [aeiou], ca[nt]* => can cant candy ... etc)
+- [[:alpha:]] => Matches upper and lower case letters. Exactly One match.
+- [[:alnum:]] => Matches upper and lower case letters or any decimal digits (0-9). Exactly One match.
+- [[:digit:]] => Matches decimal digits (0-9). Exactly One match.
+- [[:lower:]] => Matches lower case letters. Exactly One match.
+- [[:space:]] => Matches White Space. Exactly One match.
+- [[:upper:]] => Matches upper case letters. Exactly One match.
 
-[!] - matches any of the characters NOT included inside the bracket. Exactly one match.
-(Ex: [!aeiou]* => First character should not be a vowel)
+- \ - Match a wildcard character (Escape) (Ex: *\? => matches anything followed by a question mark [Ex: 'done?'])
 
-[x-y] - creating a range of values to match. Exactly one match.
-(Ex: [a-g]* => start with any letter between a and g, [3-6]* => start with any number between 3 and 6)
-
-[[:alpha:]] => Matches upper and lower case letters. Exactly One match.
-[[:alnum:]] => Matches upper and lower case letters or any decimal digits (0-9). Exactly One match.
-[[:digit:]] => Matches decimal digits (0-9). Exactly One match.
-[[:lower:]] => Matches lower case letters. Exactly One match.
-[[:space:]] => Matches White Space. Exactly One match.
-[[:upper:]] => Matches upper case letters. Exactly One match.
-
-\ - Match a wildcard character (Escape)
-(Ex: *\? => matches anything followed by a question mark [Ex: 'done?'])
-
-(TIP:: good practice to not include wildcards as filenames/directory names)
+TIP:: good practice to **not** include wildcards as filenames/directory names.
 
 Examples:
----------
-`ls *.txt` => list all files ending with '.txt'
-`ls a*` => list all files starting with 'a'
-`ls *aA` => list all files containing 'aA'
-`ls ?` => list all files containing one character
-`ls ??` => list all files containing two characters
-`ls ?.txt` => list all files containing one character and ending with '.txt'
-`ls fil?` => list all files such as 'file', 'filk', 'fild' ... (starting with 'fil' followed by any one character)
-`ls [a-d]*` => list all files starting with any lowercase letter in between 'a' and 'd'
-`ls *mp[[:digit:]]` => lists all files ending with 'mp' and a digit(0-9). [Ex: ending with 'mp3', 'mp4', ...]
+- `ls *.txt` => list all files ending with '.txt'
+- `ls a*` => list all files starting with 'a'
+- `ls *aA` => list all files containing 'aA'
+- `ls ?` => list all files containing one character
+- `ls ??` => list all files containing two characters
+- `ls ?.txt` => list all files containing one character and ending with '.txt'
+- `ls fil?` => list all files such as 'file', 'filk', 'fild' ... (starting with 'fil' followed by any one character)
+- `ls [a-d]*` => list all files starting with any lowercase letter in between 'a' and 'd'
+- `ls *mp[[:digit:]]` => lists all files ending with 'mp' and a digit(0-9). [Ex: ending with 'mp3', 'mp4', ...]
 
-USING WILDCARDS IN YOUR SHELL SCRIPTS:
---------------------------------------
+#### Using Wildcars in Shell Scripts:
+
 Wildcards are great for working with groups of files of directories.
 
-We can use it just like in regualar commands:
-Ex1:
-`#!/bin/bash
- cd /var/www
- cp *.html /var/www-just-html`
+We can use it just like in regualar commands. Ex1:
+```
+#!/bin/bash
+cd /var/www
+cp *.html /var/www-just-html`
+```
 
 Ex2:
-`for FILE in /var/www/*.html 			[NOTE:: if only `*.html` => refers to '.html' files in PWD]
- do
- 	echo "Copying $FILE"
- 	cp $FILE /var/www-just-html
- done`
+```
+for FILE in /var/www/*.html
+do
+	echo "Copying $FILE"
+	cp $FILE /var/www-just-html
+done
+```
 
-[NOTE:: In the above example, the wildcard matches in the for loop expand as a List/Array that can be Iterated.]
+(NOTE: In the above example, the wildcard matches in the for loop expand as a List/Array that can be Iterated.)
 
-----------------------------------------------------------------------------------------------------------------
+### Switch-Case Statements:
 
-CASE STATEMENTS:
-================
-
-(Similar to `Switch-Case`) => Testing for multiple values.
-
-Use in-place of many 'if-elif-elif-elif...' scenarios!
+(Similar to `Switch-Case`) => Testing for multiple values. Use in-place of many 'if-elif-elif-elif...' scenarios!
 
 Syntax:
--------
-`case "$VAR" in
- 	pattern_1)
- 		#commands go here
- 		;;
- 	pattern_N)
- 		#commands go here
- 		;;
- esac`
+```
+case "$VAR" in
+	pattern_1)
+		#commands go here
+		;;
+	pattern_N)
+		#commands go here
+		;;
+esac
+```
 
-(Patterns are case-sensitive!)
-Once a pattern has been matched, the commands of a pattern are executed until `;;` is reached!
-(`;;` is like a break statement)
+Patterns are case-sensitive!. Once a pattern has been matched, the commands of a pattern are executed until `;;` is reached! `;;` is like a break statement.
 
-Examples:
----------
-Ex1:
-`case "$1" in
+Examples. Ex1:
+```
+case "$1" in
 	start)
-		/usr/sbin/sshd						[ <= Executes the script at the specified path!]
+		/usr/sbin/sshd			# Executes the script at the specified path!
 		;;
 	stop)
 		kill $(cat /var/run/sshd.pid)
 		;;
- esac`
+esac
+```
 
-[Note: Wildcards can be used as patterns: Ex: `*)` matches anything.]
+Note: Wildcards can be used as patterns: Ex: `*)` matches anything.
 
-The pipe(|) maybe used as an 'OR' in the patterns:
-Ex2:
-`case "$1" in
+The pipe(|) maybe used as an 'OR' in the patterns. Ex2:
+```
+case "$1" in
 	start|START)
 		/usr/sbin/sshd
 		;;
@@ -602,14 +594,15 @@ Ex2:
 	*)
 		echo "Usage: $0 start|stop" ; exit 1
 		;;
- esac`
+esac
+```
 
-(The above example matches either upper or lower case 'start', else either upper or lower case 'stop', else it
-matches anything that did not match one of the first two cases.)
+The above example matches either upper or lower case 'start', else either upper or lower case 'stop', else it
+matches anything that did not match one of the first two cases.
 
-[We can use other wildcards in the patterns as well].
-Ex3:
-`case "$1" in
+We can use other wildcards in the patterns as well. Ex3:
+```
+case "$1" in
 	[yY]|[yY][eE][sS])
 		echo "You answered yes."
 		;;
@@ -619,83 +612,80 @@ Ex3:
 	*)
 		echo "Invalid Answer."
 		;;
- esac`
- (Above matches y, yes (case-insensitive) or n, no(case-insensitive)).
+esac
+```
+Above matches y, yes (case-insensitive) or n, no(case-insensitive).
 
-[NOTE:: All the rules of wildcards are valid for patterns of case statements].
+NOTE: All the rules of wildcards are valid for patterns of case statements.
 
 Case Statements:
-In place of if statements,
-Wildcards maybe used for patterns.
-Multiple patterns can be matched with the help of a pipe(|) which acts as an 'OR' in the pattern.
+- In place of if statements,
+- Wildcards maybe used for patterns.
+- Multiple patterns can be matched with the help of a pipe(|) which acts as an 'OR' in the pattern.
 
-----------------------------------------------------------------------------------------------------------------
+### Logging:
 
-Logging:
-========
-'Syslog` => Uses standard facilities and severities to categorize messages.
-	Facilities => kern, user, mail, daemon, auth, local0, local7
-	Severities => emerg, alert, crit, err, warning, notice, info, debug
+`Syslog` => Uses standard facilities and severities to categorize messages.
 
-(Ex: if your script is using mail, you could use the 'mail' facility for logging.)
+- `Facilities`: `kern`, `user`, `mail`, `daemon`, `auth`, `local0`, `local7`, etc.
+- `Severities`: `emerg`, `alert`, `crit`, `err`, `warning`, `notice`, `info`, `debug`.
 
-Log files locations are CONFIGURABLE:
--------------------------------------
+Ex: if your script is using mail, you could use the 'mail' facility for logging.
+
+#### Log files locations are CONFIGURABLE:
+
 1. '/var/log/messages' 
+
 (or)
+
 2. '/var/log/syslog'
+
 (Location depends on system)
 
-Logging with `logger`:
---------------------
-`logger` is a command line utility - used for logging 'syslog' messages.
-By default, it creates 'user.notice' messages.
+#### Logging with `logger`:
 
-1. Basic logging message:
-`logger "Message"`
+`logger` is a command line utility - used for logging 'syslog' messages. By default, it creates `user.notice` messages.
 
-[Ex output: 'Aug 2 01:02:44 linuxsvr: Message']
+1. Basic logging message: `logger "Message"`
 
-2. Logging message with facility and severity: (`logger -p facility.severity "Message"`)
-`logger -p local0.info "Message"`
+Example output: 'Aug 2 01:02:44 linuxsvr: Message'.
+
+2. Logging message with facility and severity: Syntax: `logger -p facility.severity "Message"` 
+
+Ex: `logger -p local0.info "Message"`
 
 3. Tagging the log message: Use the `-t` option followed by tagName
-(Usually you want to use the script's name as tag in order to easily identify the source of the log message)
-`logger -t myscript -p local0.info "Message"`
 
-[Ex output: 'Aug 2 01:02:44 linuxsvr myscript: Message']
+Usually you want to use the script's name as tag in order to easily identify the source of the log message. `logger -t myscript -p local0.info "Message"`
 
-4. Include PID(Process ID in the log message): use `-i` option
-`logger -i -t myscript "Message"`
+Example output: 'Aug 2 01:02:44 linuxsvr myscript: Message'
 
-[Ex output: 'Aug 2 01:02:44 linuxsvr myscript[12986]: Message']
+4. Include PID(Process ID in the log message): use `-i` option: `logger -i -t myscript "Message"`
+
+Ex output: 'Aug 2 01:02:44 linuxsvr myscript[12986]: Message'
 
 5. Additionally display log message on screen (apart from already logging it to the log file): use `-s` option
-`logger -s -p local0.info "Message"`
 
-[NOTE:: Different facilities and severities could cause the system logger to route the log messages to a different locaton/log file]
+Ex: `logger -s -p local0.info "Message"`
 
-----------------------------------------------------------------------------------------------------------------
+NOTE: Different facilities and severities could cause the system logger to route the log messages to a different locaton/log file.
 
-NOTE:
------
-$RANDOM generates a random number:
-Ex:
+**NOTE:**
+
+`$RANDOM` generates a random number. Ex:
+
 `echo "$RANDOM"` => 29133
 
-Using `shift`:
-`shift` => Shifts the command line arguments to the left 
-(script name is deleted)
-(original param1 becomes $0, original param2 becomes $1, and so on ...)
+Using `shift`: `shift` shifts the command line arguments to the left (The script name is deleted).
 
-----------------------------------------------------------------------------------------------------------------
+The original param1 becomes $0, original param2 becomes $1, and so on ...
 
-`while` loops:
-==============
+### `while` loops:
+
 Loop control (Alternative to `for`)
 
 Syntax:
--------
+```
 while [ CONDITION_IS_TRUE ]
 do
 	command 1
@@ -703,110 +693,115 @@ do
 	...
 	command N
 done
+```
 
-(While the command in the command keeps returning 0(success) exit status, the while loop keeps looping/executing.)
-(Usually commands inside the while loop change the condition for the next iteration's check.)
+While the command in the command keeps returning 0(success) exit status, the while loop keeps looping/executing. Usually commands inside the while loop change the condition for the next iteration's check.
 
-Infinite While loops:
---------------------- 
-Condition is always true, keeps looping forever (`CTRL-C` to exit the script - when executed in the terminal)
-(You may need to use the `kill` command to kill the process - when run as an application outside terminal)
+#### Infinite While loops:
 
-You may want to run some background processes infinitely:
-Ex: Runninga daemon process in the background.
-`while true
- do
- 	command 1 ... N
- 	sleep 1
- done`
+Condition is always true, keeps looping forever (Use `CTRL-C` to exit the script - when executed in the terminal). You may need to use the `kill` command to kill the process - when run as an application outside terminal.
 
-[The `sleep` command: Used to 'PAUSE' the execution of the code for a given number of seconds (as argument).]
+You may want to run some background processes infinitely: Ex: Running a daemon process in the background:
+```
+while true
+do
+	command 1 ... N
+	sleep 1
+done
+```
 
-Examples of while loops:
-------------------------
-Ex1:
-----
-`INDEX=1
- while [ $INDEX -lt 6 ]
- do
- 	echo "Creating project-${INDEX}"
- 	mkdir /usr/local/project-${INDEX}
- 	((INDEX++))							[Arithmetic operations are enclosed within '((...))']
- done`
+The `sleep` command: Used to 'PAUSE' the execution of the code for a given number of seconds (as argument).
 
- Ex2:
- ----
- `while [ "$CORRECT" != "y" ]
-  do
- 	read -p "Enter your name: " NAME
- 	read -p "Is $NAME correct?: " CORRECT
-  done`
+Examples of while loops: Ex1:
+```
+INDEX=1
+while [ $INDEX -lt 6 ]
+do
+	echo "Creating project-${INDEX}"
+	mkdir /usr/local/project-${INDEX}
+	((INDEX++))				# Arithmetic operations are enclosed within '((...))'
+done
+```
 
- Ex3:
- ----
-`while ping -c 1 app1 > /dev/null	[ping must succeed & redirect o/p to /dev/null as we don't want to see msg]
- do
- 	echo "app1 still up ... "
- 	sleep 5							[Pause execution for 5 seconds]
- done
- 
- echo "app1 is down! ... "`
+Ex2:
+```
+while [ "$CORRECT" != "y" ]
+do
+	read -p "Enter your name: " NAME
+	read -p "Is $NAME correct?: " CORRECT
+done
+```
 
-----------------------------
-Reading a file LINE-BY-LINE:
-----------------------------
-Not possible in `for` loop since it reads word by word.
+Ex3:
+```
+while ping -c 1 app1 > /dev/null	# ping must succeed & redirect o/p to /dev/null as we don't want to see msg
+do
+	echo "app1 still up ... "
+	sleep 5				# Pause execution for 5 seconds
+done
+echo "app1 is down! ... "
+```
+
+#### Reading a file LINE-BY-LINE:
+
+- Not possible in `for` loop since it reads word by word.
+
 While loop example:
-`LINE_NUM=1
- while read LINE
-  do
- 	echo "${LINE_NUM}: ${LINE}"
- 	((LINE_NUM++))
-  done < /etc/fstab`
+```
+LINE_NUM=1
+while read LINE
+do
+	echo "${LINE_NUM}: ${LINE}"
+	((LINE_NUM++))
+done < /etc/fstab
+```
 
-(The /etc/fstab is taken as input to the whole while loop.)
-(`read LINE` reads the current line of the file) 
-(Since it is a condition of the while, while stops when lines of the files are over)
+- The /etc/fstab is taken as input to the whole while loop.
+- `read LINE` reads the current line of the file
+- Since it is a condition of the while, while stops when lines of the files are over
 
-[Note: input to read command need not only be lines from a file, we can use pipelining to the while to read from commands, etc]
-[Note: read command supports splitting of data that it reads into multiple variables!]
+Note: input to read command need not only be lines from a file, we can use pipelining to the while to read from commands, etc.
 
-Exiting a loop before it's normal end:
---------------------------------------
-Use `break` statement.
-`while [ CONDITION_IS_TRUE ]
- do
- 	...
- 	break
- 	...
- done`
+Note: read command supports splitting of data that it reads into multiple variables!
 
-Skipping iteration and executing next iteration on a loop:
-----------------------------------------------------------
-Use `continue` statement.
-`while [ CONDITION_IS_TRUE ]
- do
- 	...
- 	continue
- 	...
- done`
+#### Exiting a loop before it's normal end:
 
-----------------------------------------------------------------------------------------------------------------
+- Use `break` statement.
+```
+while [ CONDITION_IS_TRUE ]
+do
+	...
+	break
+	...
+done
+```
 
-ARITHMETIC OPERATIONS:
-======================
-We can execute arithmetic operations within double parentheses'((...))':
-Ex: 
-`((INDEX++))` => increments INDEX value by 1 (++ operator)
+#### Skipping iteration and executing next iteration on a loop:
 
-----------------------------------------------------------------------------------------------------------------
+- Use `continue` statement.
+```
+while [ CONDITION_IS_TRUE ]
+do
+	...
+	continue
+	...
+done
+```
 
-DEBUGGING SHELL SCRIPTS:
-========================
-'bug' => error
-Examine inner workings of your script
-Get to the Source/Root of the problem
-Fix Bugs(errors)
+### Arithmetic Operations:
+
+We can execute arithmetic operations within double parentheses'((...))'. Ex: 
+
+`((INDEX++))` = increments INDEX value by 1 (++ operator). Useful within loops.
+
+
+### Debugging Shell Scripts:
+
+'bug' => Means error
+
+- Examine inner workings of your script
+- Get to the Source/Root of the problem
+- Fix Bugs(errors)
 
 `-x` option:
 ------------
