@@ -528,7 +528,7 @@ Examples:
 - `ls [a-d]*` => list all files starting with any lowercase letter in between 'a' and 'd'
 - `ls *mp[[:digit:]]` => lists all files ending with 'mp' and a digit(0-9). [Ex: ending with 'mp3', 'mp4', ...]
 
-#### Using Wildcars in Shell Scripts:
+#### Using Wildcards in Shell Scripts:
 
 Wildcards are great for working with groups of files of directories.
 
@@ -536,7 +536,7 @@ We can use it just like in regualar commands. Ex1:
 ```
 #!/bin/bash
 cd /var/www
-cp *.html /var/www-just-html`
+cp *.html /var/www-just-html
 ```
 
 Ex2:
