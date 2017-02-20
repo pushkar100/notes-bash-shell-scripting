@@ -803,179 +803,174 @@ We can execute arithmetic operations within double parentheses'((...))'. Ex:
 - Get to the Source/Root of the problem
 - Fix Bugs(errors)
 
-`-x` option:
-------------
-[1. Debug Whole script]
-`#!/bin/bash -x` => prints commands and their arguments as they execute. 
-(i.e: Values of variables, values of wildcard matches. Ex: VAR1="HI")
-(Call an x-trace)
+#### `-x` option:
 
-'PS4' controls what is shown before a line while using '-x' command (default is '+') [LATER..]
+Debug Whole script:
 
-[2. Debug from command line: ]
-`set -x` = Start Debugging
-`set +x` = Stop Debugging
+- `#!/bin/bash -x` = prints commands and their arguments as they execute. That is: Values of variables, values of wildcard matches. 
+
+Ex: `VAR1="HI"` (Call an x-trace)
+
+- `PS4` controls what is shown before a line while using '-x' command (default is '+') (LATER..)
+
+- Debug from command line: 
+	- `set -x` = Start Debugging
+	- `set +x` = Stop Debugging
+
 Ex: 
+```
 $ set -x
 $ ./scriptName.sh
 <output>
 $set +x
+```
 
-[3. Debug only a portion of the code: ]
+- Debug only a portion of the code:
 Ex:
-`#!/bin/bash
-	...
-	set -x
-	echo $VAR_NAME
-	set +x
-	...`
+```
+#!/bin/bash
+...
+set -x
+echo $VAR_NAME
+set +x
+...
+```
 
-[Note: For every command that is debugged, a '+' sign appears to it's left.
-The outputs of commands (Ex: output of echo command) DON'T have a '+' next to them.]
+Note: For every command that is debugged, a '+' sign appears to it's left. The outputs of commands (Ex: output of echo command) DON'T have a '+' next to them.
 
-[Note: Using ONLY THE `-x` flag executes subsequent lines of code (commands) even if a previous command was erroneous!]
+Note: Using ONLY THE `-x` flag executes subsequent lines of code (commands) even if a previous command was erroneous!
 
-Exit on Error:
---------------
-`-e` flag. (Exit immediately if a command exists with a non-zero status.)
+#### Exit on Error:
 
-Syntax:
-`#!/bin/bash -e`
+- `-e` flag. (Exit immediately if a command exists with a non-zero status.)
+
+Syntax: `#!/bin/bash -e`
 
 Ex: It can be combined with the trace (-x) option.
-`#!/bin/bash -e -x`
-`#!/bin/bash -ex`
-`#!/bin/bash -xe`
-`#!/bin/bash -x -e`
+- `#!/bin/bash -e -x`
+- `#!/bin/bash -ex`
+- `#!/bin/bash -xe`
+- `#!/bin/bash -x -e`
 
-Print Shell Input Lines (As they are being read):
--------------------------------------------------
-`-v` flag. (Can also be combined with -x and -e.)
-Prints input lines before (without) any substitutions and expansions are performed =>
-Therefore, All the lines of the shell script are printed as they are, and
-The outputs of printing commands(like echo) are also displayed.
+#### Print Shell Input Lines (As they are being read):
 
-`#!/bin/bash -vx` = Useful, because we can see trace (substituted input) lines as well as shell script lines!
+- `-v` flag. (Can also be combined with -x and -e.)
+
+Prints input lines before (without) any substitutions and expansions are performed. Therefore, All the lines of the shell script are printed as they are, and the outputs of printing commands(like echo) are also displayed.
+
+- `#!/bin/bash -vx` = Useful, because we can see trace (substituted input) lines as well as shell script lines!
 
 More Info: `help set` or `help set | less`
 
-----------------------------------------------------------------------------------------------------------------
+### Manual Debugging:
 
-Manual Debugging:
-=================
-You can create your own debugging code.
-Ex: Use a sepcial variable like DEBUG. (DEBUG=true, DEBUG=false)
+You can create your own debugging code. Ex: Use a sepcial variable like DEBUG. (DEBUG=true, DEBUG=false)
 
-Boolean true:   exit status 0 (success)
-Boolean false:  exit status non-zero (failure)
+- Boolean `true`  :   exit status 0 (success)
+- Boolean `false` :   exit status non-zero (failure)
 
 Ex 1:
------
-`#!/bin/bash
+```
+#!/bin/bash
 DEBUG=true
-$DEBUG && echo "debug mode on!"`
+$DEBUG && echo "debug mode on!"
+```
 
-`#!/bin/bash
+```
+#!/bin/bash
 DEBUG=false
-$DEBUG || echo "debug mode off!"`
+$DEBUG || echo "debug mode off!"
+```
 
 Ex 2: (When you want to echo lines in debug mode)
------
-`#!/bin/bash
+```
+#!/bin/bash
 DEBUG="echo"
-$DEBUG ls`
-(prints ls output to screen since $DEBUG is nothing but 'echo')
+$DEBUG ls
+```
+
+Prints ls output to screen since $DEBUG is nothing but 'echo'
 
 Ex 3:
------
-`#!/bin/bash
+```
+#!/bin/bash
 function debug() {
 	echo "Executing $@"
 	$@
 }
-debug ls`
+debug ls
+```
 
-----------------------------------------------------------------------------------------------------------------
+### Syntax Highlighting:
 
-Syntax Highlighting:
-====================
-Syntax errors are common. Use a text editor and enable syntax highlighting to identify syntax errors.
-(Ex: vim, emacs)
-Helps us catch syntax errors.
+Syntax errors are common. Use a text editor and enable syntax highlighting to identify syntax errors. (Ex: vim, emacs) Helps us catch syntax errors.
 
-----------------------------------------------------------------------------------------------------------------
+#### PS4:
 
-PS4:
-====
-Controls what is displayed before a line while using the `-x` option (during debugging).
-Default value is '+'
+Controls what is displayed before a line while using the `-x` option (during debugging). Default value is '+'
 
 Bash Variables:
-* BASH_SOURCE,  (name of the script)
-* LINENO,       (line number of the script)
-* FUNCNAME 		(function name)
-* etc ... 
+- BASH_SOURCE,  (name of the script)
+- LINENO,       (line number of the script)
+- FUNCNAME 		(function name)
+- etc ... 
 
 We can explicitly set the PS4 variable.
 
 Ex:
-`#!/bin/bash -x
+```
+#!/bin/bash -x
 ...
 PS4='+ $BASH_SOURCE : $LINENO : ${FUNCNAME[0] : '
-...`
-(Example Output: '+ ./test.sh : 3 : debug() : TEST_VAR=test')
+...
+```
 
-----------------------------------------------------------------------------------------------------------------
+Example Output: '+ ./test.sh : 3 : debug() : TEST_VAR=test'
 
-File Types (DOS/WINDOWS vs UNIX/LINUX):
-=======================================
+### File Types (DOS/WINDOWS vs UNIX/LINUX):
+
 Control character is used to represent end of line in both DOS and Unix text files.
 
 Control Character:
 1. Unix/Linux: Line Feed
 2. DOS: Carriage return & a Line Feed (2 characters)
 
-`cat -v script.sh` = View the file along with the carriage returns (^M)
+- `cat -v script.sh` = View the file along with the carriage returns (^M)
 
-When opening Linux/Unix text files on a DOS/Windows system:
-We may see one long line without new lines.
-And, in the opposite:
-We may see additional characters on Unix/Linux (`^M`). => Might run into errors while executing the files.
+When opening Linux/Unix text files on a DOS/Windows system: We may see one long line without new lines.
+
+And, in the opposite: We may see additional characters on Unix/Linux (`^M`). => Might run into errors while executing the files.
+
 Therefore, need to remove the carriage returns in order to run the file. The shebang `#!` is very important.
 
-Knowing what type of file: (To which shell does the script belong to?)
---------------------------
+#### Knowing what type of file: (To which shell does the script belong to?)
+
 `file script.sh` 
-(Example Output: 
-'script.sh: Bourne-Again shell script, ASCII text executable' => UNIX script,
-'script.sh: Bourne-Again shell script, ASCII text executable, with CRLF line terminators' => DOS script,)
 
-Converting DOS text scripts to UNIX scripts:
---------------------------------------------
-`dos2unix script.sh` => Removes incompatible characters(ex: DOS carriage returns) in DOS to match with UNIX text scripts. 
-(So that we can run it on UNIX/LINUX)
+Example Output: 
+- `script.sh: Bourne-Again shell script, ASCII text executable` => UNIX script,
+- `script.sh: Bourne-Again shell script, ASCII text executable, with CRLF line terminators` => DOS script,
 
-Confirm the removal of incompatible characters by running `file script.sh` again to see what type of shell the script runs in.
-(Should be one of the unix shells that you are using.)
+#### Converting DOS text scripts to UNIX scripts:
 
-Converting UNIX text scripts to DOS scripts:
---------------------------------------------
-`unix2dos script.sh` => Does the opposite of dos2unix. (So that we can run it on DOS/WINDOWS)
+- `dos2unix script.sh` => Removes incompatible characters(ex: DOS carriage returns) in DOS to match with UNIX text scripts. (So that we can run it on UNIX/LINUX)
 
-[How does all this happen? => 
-When editing file in one OS and operating and using it another,
-Copying from one OS and pasting in another (via net, etc),
-Copying from web browsers into the system ... many ways!]
+Confirm the removal of incompatible characters by running `file script.sh` again to see what type of shell the script runs in. (Should be one of the unix shells that you are using.)
 
-----------------------------------------------------------------------------------------------------------------
+#### Converting UNIX text scripts to DOS scripts:
+
+- `unix2dos script.sh` => Does the opposite of dos2unix. (So that we can run it on DOS/WINDOWS)
+
+How does all this happen? => When editing file in one OS and operating and using it another, Copying from one OS and pasting in another (via net, etc), Copying from web browsers into the system ... many ways!]
 
 
-****************************************************************************************************************
-USE SHELL SCRIPTS TO AUTOMATE TASKS - REPETITIVE WORK
-SHELL SCRIPTS CAN BE SHORTCUTS - DON'T HAVE TO REMEMBER EVERYTHING (LIKE EVERY COMMAND)
-HAPPY SCRIPTING!
-****************************************************************************************************************
+*************
+- USE SHELL SCRIPTS TO AUTOMATE TASKS - REPETITIVE WORK
+- SHELL SCRIPTS CAN BE SHORTCUTS - DON'T HAVE TO REMEMBER EVERYTHING (LIKE EVERY COMMAND)
+- HAPPY SCRIPTING!
+*************
 
+**THE END**
 
 
 
